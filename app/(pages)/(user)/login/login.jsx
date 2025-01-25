@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,10 @@ export default function Login() {
         email,
         password,
       });
+
       setSuccess(response.data.message);
+      localStorage.setItem("AuthToken", response.data.token)
+      Cookies.set("AuthToken",response.data.token,{ expires: 7 })
       setError(""); // Clear error message if login is successful
 
       // Redirect to the dashboard page after successful login

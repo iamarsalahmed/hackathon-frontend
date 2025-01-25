@@ -1,8 +1,19 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import axios from "axios";
+import Cookies from "js-cookie";
+
+
+
+
+
+
+
 
 export default function Dashboard() {
+  
+    const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shopName, setShopName] = useState("");
   const [shopDescription, setShopDescription] = useState("");
@@ -11,7 +22,78 @@ export default function Dashboard() {
     { id: 1, name: 'Shop One', description: 'A cool shop with awesome products.', location: 'New York' },
     { id: 2, name: 'Shop Two', description: 'Another amazing shop selling gadgets.', location: 'San Francisco' }
   ]);
-  const router = useRouter();
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = Cookies.get('AuthToken');
+
+      // If no token, redirect to login
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        // Send the token to the backend for verification
+        const response = await axios.post(
+          "http://localhost:5000/user/verify-token",
+          {}, // Body is empty as token is sent in headers
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in the Authorization header
+            },
+          }
+        );
+
+        if (!response.data.success) {
+          // If token is not valid, redirect to login
+          router.push("/login");
+        }
+        // If token is valid, proceed further (no logs or additional actions)
+      } catch (error) {
+        // If there is any error, redirect to login silently
+        router.push("/login");
+      }
+    };
+
+    verifyToken();
+  }, [router]);
+  // useEffect(() => {
+  //   const verifyToken = async () => {
+  //     const token = localStorage.getItem("AuthToken");
+
+  //     // If no token, redirect to login
+  //     if (!token) {
+  //       router.push("/login");
+  //       return;
+  //     }
+
+  //     try {
+  //       // Send the token to the backend for verification
+  //       const response = await axios.post(
+  //         "http://localhost:5000/user/verify-token",
+  //         {}, // Body is empty as token is sent in headers
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`, // Send token in the Authorization header
+  //           },
+  //         }
+  //       );
+
+  //       if (response.data.success) {
+  //         console.log("Token verified:", response.data);
+  //         // Continue to the protected page
+  //       } else {
+  //         console.log("Invalid token:", response.data.message);
+  //         router.push("/login"); // Redirect to login
+  //       }
+  //     } catch (error) {
+  //       console.error("Error verifying token:", error);
+  //       router.push("/login"); // Redirect to login in case of error
+  //     }
+  //   };
+
+  //   verifyToken();
+  // }, [router]);
 
   const openModal = () => {
     setIsModalOpen(true);
