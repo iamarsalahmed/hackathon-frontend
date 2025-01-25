@@ -23,39 +23,39 @@ export default function Dashboard() {
     { id: 2, name: 'Shop Two', description: 'Another amazing shop selling gadgets.', location: 'San Francisco' }
   ]);
   useEffect(() => {
-    const verifyToken = async () => {
-      const token = Cookies.get('AuthToken');
+    // const verifyToken = async () => {
+    //   const token = Cookies.get('AuthToken');
 
-      // If no token, redirect to login
-      if (!token) {
-        router.push("/login");
-        return;
-      }
+    //   // If no token, redirect to login
+    //   if (!token) {
+    //     router.push("/admin/login");
+    //     return;
+    //   }
 
-      try {
-        // Send the token to the backend for verification
-        const response = await axios.post(
-          "https://hackathon-backend-production-ad7c.up.railway.app/user/verify-token",
-          {}, // Body is empty as token is sent in headers
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Send token in the Authorization header
-            },
-          }
-        );
+    //   try {
+    //     // Send the token to the backend for verification
+    //     const response = await axios.post(
+    //       "https://hackathon-backend-production-ad7c.up.railway.app/user/verify-token",
+    //       {}, // Body is empty as token is sent in headers
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`, // Send token in the Authorization header
+    //         },
+    //       }
+    //     );
 
-        if (!response.data.success) {
-          // If token is not valid, redirect to login
-          router.push("/login");
-        }
-        // If token is valid, proceed further (no logs or additional actions)
-      } catch (error) {
-        // If there is any error, redirect to login silently
-        router.push("/login");
-      }
-    };
+    //     if (!response.data.success) {
+    //       // If token is not valid, redirect to login
+    //       router.push("/admin/login");
+    //     }
+    //     // If token is valid, proceed further (no logs or additional actions)
+    //   } catch (error) {
+    //     // If there is any error, redirect to login silently
+    //     router.push("/admin/login");
+    //   }
+    // };
 
-    verifyToken();
+    // verifyToken();
   }, [router]);
   // useEffect(() => {
   //   const verifyToken = async () => {
