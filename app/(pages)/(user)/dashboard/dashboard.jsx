@@ -35,7 +35,7 @@ export default function Dashboard() {
       try {
         // Send the token to the backend for verification
         const response = await axios.post(
-          "http://localhost:5000/user/verify-token",
+          "https://hackathon-backend-production-ad7c.up.railway.app/user/verify-token",
           {}, // Body is empty as token is sent in headers
           {
             headers: {
@@ -70,7 +70,7 @@ export default function Dashboard() {
   //     try {
   //       // Send the token to the backend for verification
   //       const response = await axios.post(
-  //         "http://localhost:5000/user/verify-token",
+  //         "https://hackathon-backend-production-ad7c.up.railway.app/user/verify-token",
   //         {}, // Body is empty as token is sent in headers
   //         {
   //           headers: {

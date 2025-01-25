@@ -16,7 +16,7 @@ export default function Signup() {
     e.preventDefault();
     setIsSubmitting(true); // Disable the button
     try {
-      const response = await axios.post("http://localhost:5000/user/signup", {
+      const response = await axios.post("https://hackathon-backend-production-ad7c.up.railway.app/user/signup", {
         name,
         email,
         password,

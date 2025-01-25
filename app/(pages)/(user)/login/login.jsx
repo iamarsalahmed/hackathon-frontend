@@ -17,14 +17,17 @@ export default function Login() {
     e.preventDefault();
     setIsSubmitting(true); // Disable the button
     try {
-      const response = await axios.post("http://localhost:5000/user/login", {
+      const response = await axios.post(
+        // "https://hackathon-backend-production-ad7c.up.railway.app/user/login", 
+       " https://hackathon-backend-production-ad7c.up.railway.app/user/login ",
+        {
         email,
         password,
       });
 
       setSuccess(response.data.message);
       localStorage.setItem("AuthToken", response.data.token)
-      Cookies.set("AuthToken",response.data.token,{ expires: 7 })
+      Cookies.set("AuthToken",response.data.token, { secure: true, expires: 0.5  })
       setError(""); // Clear error message if login is successful
 
       // Redirect to the dashboard page after successful login
