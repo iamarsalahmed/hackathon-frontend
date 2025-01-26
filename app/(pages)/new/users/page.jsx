@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useAuth } from "../../../../contexts/AuthContext"
-import { api } from "../../utils/api"
+import { useAuth } from "../../../../contexts/AuthContext.js"
+import { api } from "../../utils/api.js"
 
 export default function ManageUsers() {
   const { user } = useAuth()
