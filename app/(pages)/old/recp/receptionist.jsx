@@ -1,23 +1,27 @@
-'use client'
+
 'use client';
 
 import { useState, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
+import axios from 'axios'
+import { department } from '@/app/end-points';
+
 
 export default function ReceptionistDashboard() {
+  const [token, setToken] = useState({
+    department: '',
+    tokenNumber: '',
+    data: null,
+  });
   const [beneficiary, setBeneficiary] = useState({
     cnic: '',
     name: '',
     contact: '',
     address: '',
     purpose: '',
+    department: ''
   });
 
-  const [token, setToken] = useState({
-    department: '',
-    tokenNumber: '',
-    data: null,
-  });
 
   const [sequence, setSequence] = useState({
     Management: 1,
@@ -70,25 +74,24 @@ export default function ReceptionistDashboard() {
     });
 
     // Send data to the backend
-    sendToBackend(tokenData);
+    sendToBackend(beneficiary);
   };
 
   const sendToBackend = async (data) => {
     try {
-      const response = await fetch('/api/tokens', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send data to the backend.');
-      }
-
+      const response = await axios.post('https://saylani-management-production.up.railway.appapi/beneficiaries/', data);
+  
+      // Axios throws an error for non-2xx status codes, so if we reach here, it's successful
       alert('Token data sent to the backend successfully!');
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to send data to the backend.');
+      if (axios.isAxiosError(error)) {
+        // This is an Axios error
+        alert(`Failed to send data to the backend. ${error.response?.data?.message || error.message}`);
+      } else {
+        // This is not an Axios error
+        alert('Failed to send data to the backend.');
+      }
     }
   };
 
@@ -169,6 +172,24 @@ export default function ReceptionistDashboard() {
               placeholder="Address"
               className="border border-gray-300 p-3 rounded w-full"
             />
+            <label>purpose</label>
+            <input
+              type="text"
+              name="purpose"
+              value={beneficiary.purpose}
+              onChange={handleInputChange}
+              placeholder="purpose"
+              className="border border-gray-300 p-3 rounded w-full"
+            />
+            <label>Department</label>
+            <input
+              type="text"
+              name="department"
+              value={beneficiary.department}
+              onChange={handleInputChange}
+              placeholder="purpose"
+              className="border border-gray-300 p-3 rounded w-full"
+            />
           </div>
         </div>
 
@@ -189,8 +210,7 @@ export default function ReceptionistDashboard() {
             <option value="HR">HR</option>
             <option value="IT">IT</option>
           </select>
-          <input type="textarea" name="reason"
-           id="" />
+        
           <button
             onClick={generateToken}
             className="bg-green-500 text-white px-4 py-2 rounded mt-4 w-full"

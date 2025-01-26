@@ -96,6 +96,90 @@
 //     </div>
 //   );
 // }
+// 'use client'
+// import { useState } from "react";
+// import axios from "axios";
+// import { useRouter } from "next/navigation";
+
+// const LoginPage = () => {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [error, setError] = useState("");
+//   const router = useRouter();
+
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await axios.post("https://saylani-management-production.up.railway.appapi/users/login", {
+//         email,
+//         password,
+//       });
+
+//       // Redirect user to dashboard or home page based on role
+//       if (response.data.role === "Admin") {
+//         router.push("/new/dashboard");
+//       } else {
+//         router.push("/new/dashboard");
+//       }
+//     } catch (err) {
+//       setError("Invalid email or password.");
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+//       <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+//       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+//       <form onSubmit={handleLogin}>
+//         <div className="mb-4">
+//           <label htmlFor="email" className="block text-sm font-medium text-gray-600">
+//             Email
+//           </label>
+//           <input
+//             type="email"
+//             id="email"
+//             name="email"
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             required
+//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//           />
+//         </div>
+
+//         <div className="mb-4">
+//           <label htmlFor="password" className="block text-sm font-medium text-gray-600">
+//             Password
+//           </label>
+//           <input
+//             type="password"
+//             id="password"
+//             name="password"
+//             value={password}
+//             onChange={(e) => setPassword(e.target.value)}
+//             required
+//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//           />
+//         </div>
+
+//         <button
+//           type="submit"
+//           className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//         >
+//           Login
+//         </button>
+//       </form>
+
+//       <p className="text-sm text-center mt-4">
+//         Don't have an account?{" "}
+//         <a href="/signup" className="text-blue-500 hover:underline">
+//           Sign Up
+//         </a>
+//       </p>
+//     </div>
+//   );
+// };
+
+// export default LoginPage;
 'use client'
 import { useState } from "react";
 import axios from "axios";
@@ -110,17 +194,17 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", {
+      const response = await axios.post("https://saylani-management-production.up.railway.appapi/users/login", {
         email,
         password,
       });
-
+     router.push("/new/dashboard");
       // Redirect user to dashboard or home page based on role
-      if (response.data.role === "Admin") {
-        router.push("/admin/dashboard");
-      } else {
-        router.push("/user/dashboard");
-      }
+      // if (response.data.role === "Admin") {
+      //   router.push("/admin/dashboard");
+      // } else {
+      
+      // }
     } catch (err) {
       setError("Invalid email or password.");
     }

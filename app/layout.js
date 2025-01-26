@@ -27,3 +27,33 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+// import { Inter } from "next/font/google"
+// import "./globals.css"
+// import Navigation from "../components/Navigation"
+// import { AuthProvider } from "../context/AuthContext"
+
+// const inter = Inter({ subsets: ["latin"] })
+
+// export const metadata = {
+//   title: "Beneficiary Management App",
+//   description: "Efficiently manage and track beneficiaries seeking help",
+// }
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <body className={inter.className}>
+//         <AuthProvider>
+//           <div className="min-h-screen flex flex-col">
+//             <Navigation />
+//             <main className="flex-grow container mx-auto p-4">{children}</main>
+//             <footer className="bg-gray-100 text-center p-4">
+//               <p>&copy; 2023 Saylani Welfare. All rights reserved.</p>
+//             </footer>
+//           </div>
+//         </AuthProvider>
+//       </body>
+//     </html>
+//   )
+// }
+

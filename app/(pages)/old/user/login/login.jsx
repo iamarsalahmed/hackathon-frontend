@@ -3,29 +3,37 @@
 // import axios from "axios";
 // import Link from "next/link";
 // import { useRouter } from 'next/navigation'
+// import Cookies from "js-cookie";
 
-// export default function Signup() {
-//   const [name, setName] = useState("");
+// export default function Login() {
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
 //   const [error, setError] = useState("");
 //   const [success, setSuccess] = useState("");
-//   const [isSubmitting, setIsSubmitting] = useState(false); // New state for button control
-//   const router = useRouter()
-//   const handleSignup = async (e) => {
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const router = useRouter();
+
+//   const handleLogin = async (e) => {
 //     e.preventDefault();
 //     setIsSubmitting(true); // Disable the button
 //     try {
-//       const response = await axios.post("https://hackathon-backend-production-ad7c.up.railway.app/user/signup", {
-//         name,
+//       const response = await axios.post(
+//         // "https://hackathon-backend-production-ad7c.up.railway.app/user/login", 
+//        " https://hackathon-backend-production-ad7c.up.railway.app/user/login ",
+//         {
 //         email,
 //         password,
 //       });
-//       window.location.href("/login")
+
 //       setSuccess(response.data.message);
-//       setError("");
+//       localStorage.setItem("AuthToken", response.data.token)
+//       Cookies.set("AuthToken",response.data.token, { secure: true, expires: 0.5  })
+//       setError(""); // Clear error message if login is successful
+
+//       // Redirect to the dashboard page after successful login
+//       router.push("/user/dashboard");
 //     } catch (err) {
-//       setError(err.response?.data?.message || "Signup failed");
+//       setError(err.response?.data?.message || "Login failed");
 //       setSuccess("");
 //     } finally {
 //       setIsSubmitting(false); // Re-enable the button
@@ -40,19 +48,8 @@
 
 //       {/* Form Container */}
 //       <div className="z-10 w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-//         <h2 className="text-2xl font-bold text-center text-gray-800">Sign Up</h2>
-//         <form className="space-y-4" onSubmit={handleSignup}>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">Name</label>
-//             <input
-//               type="text"
-//               value={name}
-//               onChange={(e) => setName(e.target.value)}
-//               className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-purple-500 focus:border-purple-500"
-//               placeholder="Enter your name"
-//               required
-//             />
-//           </div>
+//         <h2 className="text-2xl font-bold text-center text-gray-800">Welcome Back</h2>
+//         <form className="space-y-4" onSubmit={handleLogin}>
 //           <div>
 //             <label className="block text-sm font-medium text-gray-700">Email Address</label>
 //             <input
@@ -86,13 +83,13 @@
 //                 : "bg-purple-600 hover:bg-purple-700"
 //             }`}
 //           >
-//             {isSubmitting ? "Processing..." : "Sign Up"}
+//             {isSubmitting ? "Processing..." : "Login"}
 //           </button>
 //         </form>
 //         <p className="mt-4 text-sm text-center text-gray-600">
-//           Already have an account?{" "}
-//           <Link href="/login" className="text-purple-500 hover:underline">
-//             Login
+//           Don't have an account?{" "}
+//           <Link href="/signup" className="text-purple-500 hover:underline">
+//             Sign up
 //           </Link>
 //         </p>
 //       </div>
@@ -104,53 +101,36 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-const SignupPage = () => {
-  const [name, setName] = useState("");
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Admin");
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSignup = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/users/register", {
-        name,
+      const response = await axios.post("https://saylani-management-production.up.railway.appapi/users/login", {
         email,
         password,
-        role,
       });
 
-      // Redirect user after successful registration
-      if (response.status === 201) {
-        router.push("/user/login");
+      // Redirect user to dashboard or home page based on role
+      if (response.data.role === "Admin") {
+        router.push("/dashboard");
+      } else {
+        router.push("/dashboard");
       }
     } catch (err) {
-      setError("Error registering user. Please try again.");
+      setError("Invalid email or password.");
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
+      <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-      <form onSubmit={handleSignup}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-600">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
+      <form onSubmit={handleLogin}>
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-600">
             Email
@@ -181,42 +161,22 @@ const SignupPage = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="role" className="block text-sm font-medium text-gray-600">
-            Role
-          </label>
-          <select
-            id="role"
-            name="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="Admin">Admin</option>
-            <option value="Receptionist">Receptionist</option>
-            <option value="Staff">Staff</option>
-          </select>
-        </div>
-
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Sign Up
+          Login
         </button>
       </form>
 
       <p className="text-sm text-center mt-4">
-        Already have an account?{" "}
-        <a href="/login" className="text-blue-500 hover:underline">
-          Login
+        Don't have an account?{" "}
+        <a href="/signup" className="text-blue-500 hover:underline">
+          Sign Up
         </a>
       </p>
     </div>
   );
 };
 
-export default SignupPage;
-
-
+export default LoginPage;
